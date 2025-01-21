@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BF29769C2D2AB5BB00230502 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = BF29769B2D2AB5BB00230502 /* KeyboardShortcuts */; };
+		BF29769F2D2AC4FD00230502 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = BF29769E2D2AC4FD00230502 /* LaunchAtLogin */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		BF2976882D2AA7C600230502 /* Smart Randomizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Smart Randomizer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF29769F2D2AC4FD00230502 /* LaunchAtLogin in Frameworks */,
+				BF29769C2D2AB5BB00230502 /* KeyboardShortcuts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +72,8 @@
 			);
 			name = "Smart Randomizer";
 			packageProductDependencies = (
+				BF29769B2D2AB5BB00230502 /* KeyboardShortcuts */,
+				BF29769E2D2AC4FD00230502 /* LaunchAtLogin */,
 			);
 			productName = "Smart Randomizer";
 			productReference = BF2976882D2AA7C600230502 /* Smart Randomizer.app */;
@@ -94,6 +103,10 @@
 			);
 			mainGroup = BF29767F2D2AA7C600230502;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BF29769A2D2AB5BB00230502 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				BF29769D2D2AC4FD00230502 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BF2976892D2AA7C600230502 /* Products */;
 			projectDirPath = "";
@@ -257,6 +270,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Smart-Randomizer-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -284,6 +298,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Smart-Randomizer-Info.plist";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -319,6 +334,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BF29769A2D2AB5BB00230502 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.4;
+			};
+		};
+		BF29769D2D2AC4FD00230502 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/LaunchAtLogin-Modern";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BF29769B2D2AB5BB00230502 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BF29769A2D2AB5BB00230502 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+		BF29769E2D2AC4FD00230502 /* LaunchAtLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BF29769D2D2AC4FD00230502 /* XCRemoteSwiftPackageReference "LaunchAtLogin-Modern" */;
+			productName = LaunchAtLogin;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BF2976802D2AA7C600230502 /* Project object */;
 }
