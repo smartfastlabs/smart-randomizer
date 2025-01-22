@@ -21,7 +21,7 @@ class ConfigService:ObservableObject {
     @Published var maxValue: Int
     @Published var generateEvery: Double
     @Published var runOnStartUp: Bool = false;
-    @Published var huds: [HUDConfig] = []
+    @Published var huds: [UUID:HUDConfig] = [:]
     
     let defaults = UserDefaults.standard
     
@@ -43,7 +43,7 @@ class ConfigService:ObservableObject {
     func loadHUDConfig() {
         if let data = UserDefaults.standard.data(forKey: "huds") {
             do {
-                self.huds  = try JSONDecoder().decode([HUDConfig].self, from: data)
+                self.huds  = try JSONDecoder().decode([UUID:HUDConfig].self, from: data)
 
             } catch {
                 print("Unable to Decode HUD Configs (\(error))")
@@ -56,7 +56,7 @@ class ConfigService:ObservableObject {
         minValue: Int? = nil,
         generateEvery: Double? = nil,
         runOnStartUp: Bool? = nil,
-        huds: [HUDConfig]? = nil
+        huds: [UUID:HUDConfig]? = nil
     ) {
         if (runOnStartUp != nil) {
             LaunchAtLogin.isEnabled = runOnStartUp!

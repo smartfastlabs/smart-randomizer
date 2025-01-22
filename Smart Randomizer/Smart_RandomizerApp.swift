@@ -12,6 +12,7 @@ import Combine
 extension KeyboardShortcuts.Name {
     static let generateRandomNumber = Self("generateRandomNumber")
     static let toggleShowHUDs = Self("toggleShowHUDs")
+    static let newHUD = Self("newHUD")
 }
 
 var welcomeWindow: NSWindow? = nil
@@ -29,6 +30,7 @@ struct RandomizerApp: App {
     init() {
         let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         let appConfig = ConfigService()
+
         let randomizer = RandomizerService(config: appConfig)
         let hudManager = HUDManager(config: appConfig, timer: timer)
         self.timer = timer
@@ -39,6 +41,7 @@ struct RandomizerApp: App {
             randomizer.update()
         }
         
+
         if showWelcome {
             print("Show Welcome")
             

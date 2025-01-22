@@ -21,11 +21,14 @@ struct HUDView: View {
         self._appConfig = StateObject(wrappedValue: config)
         self._randomizer = StateObject(wrappedValue: randomizer)
     }
-    
+
+    func close(_: _ModifiersGesture<TapGesture>.Value) {
+        print("ADSFSDF")
+    }
     
     var body: some View {
         Text(self.randomizer.value.formatted(.number))
-            .frame(width: 40, height: 40)
+            .frame(width: 40, height: 22)
             .background(Color.green)
             .clipShape(Capsule())
             .onReceive(timer) { input in
@@ -34,24 +37,13 @@ struct HUDView: View {
             .onTapGesture {
                 self.randomizer.update()
             }
+            .contextMenu {
+                Button(action: {
+                    print("Hello")
+                }) {
+                    Text("Say Hello")
+                    Image(systemName: "hand.wave")
+                }
+            }
     }
-}
-
-func OpenHud(config: ConfigService, hud: HUDConfig, timer: Publishers.Autoconnect<Timer.TimerPublisher>) -> NSWindow {
-    let window = NSWindow(
-        contentRect: NSRect(x: 100, y: 150, width: 300, height: 200),
-        styleMask: [.borderless, .fullSizeContentView, .hudWindow],
-        backing: .buffered,
-        defer: false
-    )
-    
-    window.contentView = NSHostingView(rootView: HUDView(config: config, timer: timer))
-    window.backgroundColor = NSColor.clear
-    window.isReleasedWhenClosed = true
-    window.isMovableByWindowBackground = true
-    window.level = .floating
-    window.orderFrontRegardless()
-    window.center()
-    window.setFrameOrigin(NSPoint(x: hud.x, y: hud.y))
-    return window
 }

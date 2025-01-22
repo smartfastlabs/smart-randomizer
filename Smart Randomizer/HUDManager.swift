@@ -23,12 +23,15 @@ class HUDManager: ObservableObject {
         KeyboardShortcuts.onKeyUp(for: .toggleShowHUDs) {
             self.toggleHUDs()
         }
+        KeyboardShortcuts.onKeyUp(for: .newHUD) {
+            self.newHUD()
+        }
     }
     
     
     func addHUD(hud: HUDConfig, timer: Publishers.Autoconnect<Timer.TimerPublisher>) -> NSWindow {
         let window = NSWindow(
-            contentRect: NSRect(x: 100, y: 150, width: 300, height: 200),
+            contentRect: NSRect(x: hud.x, y: hud.y, width: 300, height: 200),
             styleMask: [.borderless, .fullSizeContentView, .hudWindow],
             backing: .buffered,
             defer: false
@@ -40,10 +43,51 @@ class HUDManager: ObservableObject {
         window.isMovableByWindowBackground = true
         window.level = .floating
         window.orderFrontRegardless()
-        window.setFrameOrigin(NSPoint(x: hud.x, y: hud.y))
-        print(self.windows)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(windowDidMove),
+            name: NSWindow.didMoveNotification,
+            object: window
+        )
         self.windows[hud.id] = window
         return window
+    }
+    func newHUD() {
+        var hud = HUDConfig(x: 500, y: 500, id: UUID())
+        let window = addHUD(hud: hud, timer: timer)
+        window.center()
+        hud.x = Int(window.frame.origin.x)
+        hud.y = Int(window.frame.origin.y)
+        self.appConfig.huds[hud.id] = hud
+        self.appConfig.setConfig(huds: self.appConfig.huds)
+    }
+    
+    @objc private func windowDidMove(_ notification: Notification) {
+        
+        guard let window = notification.object as? NSWindow else { return }
+        
+        var hudID: UUID? = nil
+        
+        for (id, temp) in self.windows {
+            if temp == window {
+                hudID = id
+                break
+            }
+        }
+        
+        if (hudID == nil) {
+            print("COULD NOT FIND HUD ID")
+            return
+        }
+        
+        let frame = window.frame
+        let x = Int(frame.origin.x)
+        let y = Int(frame.origin.y)
+        
+
+        appConfig.huds[hudID!] = HUDConfig(x: x, y: y, id: hudID!)
+        appConfig.setConfig(huds: appConfig.huds)
+        print("Window \(hudID!) moved to: x: \(x), y: \(y)")
     }
     
     func closeHUDs() {
@@ -54,10 +98,9 @@ class HUDManager: ObservableObject {
     }
     
     func openHUDs() {
-        _ = addHUD(hud: HUDConfig(x: 10, y: 20, id: UUID()), timer: timer)
-        _ = addHUD(hud: HUDConfig(x: 100, y: 200, id: UUID()), timer: timer)
-        _ = addHUD(hud: HUDConfig(x: 400, y: 400, id: UUID()), timer: timer)
-        _ = addHUD(hud: HUDConfig(x: 800, y: 800, id: UUID()), timer: timer)
+        for (_, hud) in self.appConfig.huds {
+            _ = addHUD(hud: hud, timer: timer)
+        }
     }
     
     func toggleHUDs() {

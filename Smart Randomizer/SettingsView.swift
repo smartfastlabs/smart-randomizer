@@ -58,8 +58,9 @@ struct SettingsView: View {
             }.padding(.vertical, 2)
             
             Form {
-                KeyboardShortcuts.Recorder("", name: .generateRandomNumber)
-                KeyboardShortcuts.Recorder("", name: .toggleShowHUDs)
+                KeyboardShortcuts.Recorder("Generate", name: .generateRandomNumber)
+                KeyboardShortcuts.Recorder("Toggle HUDs", name: .toggleShowHUDs)
+                KeyboardShortcuts.Recorder("Add HUD", name: .newHUD)
             }.padding(.vertical, 2).padding(.bottom, 10)
             
         }.overlay(
