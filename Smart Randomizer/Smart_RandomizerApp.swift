@@ -19,6 +19,8 @@ var welcomeWindow: NSWindow? = nil
 
 @main
 struct RandomizerApp: App {
+    @Environment(\.colorScheme) var colorScheme
+    
     @StateObject var appConfig: ConfigService
     @StateObject var randomizer: RandomizerService
     @StateObject var hudManager: HUDManager
@@ -92,7 +94,9 @@ struct RandomizerApp: App {
                 .clipped()
                 .frame(maxWidth: .infinity)
         } label: {
-            Image(systemName: "scribble.variable")
+            Image(
+                systemName: colorScheme == .light ? "questionmark.circle" : "questionmark.circle.fill"
+            ).frame(width: 50, height: 50).aspectRatio(contentMode: .fit)
             if (self.appConfig.showNumberInMenu) {
                 Text(self.randomizer.value.formatted(.number)).onReceive(timer) { input in
                     self.randomizer.updateIfReady()

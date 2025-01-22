@@ -38,7 +38,9 @@ struct HUDView: View {
     var body: some View {
         Text(self.randomizer.value.formatted(.number))
             .frame(width: 40, height: 22)
-            .background(Color.green)
+            .background(Color.black)
+            .foregroundColor(Color.white)
+            .fontWeight(.heavy)
             .clipShape(Capsule())
             .onReceive(timer) { input in
                 self.randomizer.updateIfReady()
@@ -50,8 +52,14 @@ struct HUDView: View {
                 Button(action: {
                     self.hudManager.close(id: self.id)
                 }) {
-                    Text("Remove")
+                    Text("Remove HUD")
                     Image(systemName: "xmark.circle")
+                }
+                Button(action: {
+                    NSApplication.shared.terminate(nil)
+                }) {
+                    Text("Quit Smart Randomizer")
+                    Image(systemName: "power")
                 }
             }
     }
