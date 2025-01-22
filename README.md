@@ -1,4 +1,4 @@
-Smart Randomizer - Poker Tool
+Smart Randomizer - GTO Poker Tool
 
 Master optimal play patterns and sharpen your poker strategy with Smart Randomizer, the ultimate training companion for online poker enthusiasts. Built by players, for players.
 
