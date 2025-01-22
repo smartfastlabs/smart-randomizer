@@ -10,11 +10,13 @@ import KeyboardShortcuts
 
 struct SettingsView: View {
     @StateObject var config: ConfigService
+    @StateObject var hudManager: HUDManager
     
     let defaults = UserDefaults.standard
     
-    init(config: ConfigService) {
+    init(config: ConfigService, hudManager: HUDManager) {
         self._config = StateObject(wrappedValue: config)
+        self._hudManager = StateObject(wrappedValue: hudManager)
     }
     
     var body: some View {
@@ -47,14 +49,30 @@ struct SettingsView: View {
                 }
                 Text("Seconds")
             }.padding(.horizontal, 10).padding(.top, 0)
-            HStack {
+            VStack {
                 Toggle(
                     "Run on Start Up",
                     isOn: $config.runOnStartUp
                 ).onChange(of: config.runOnStartUp) {
-                    print("ADfSD")
                     config.setConfig(runOnStartUp: config.runOnStartUp)
-                }.frame(maxWidth: .infinity, alignment: .center).padding(.horizontal)
+                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal)
+                Toggle(
+                    "Show Random # in Menubar",
+                    isOn: $config.showNumberInMenu
+                ).onChange(of: config.showNumberInMenu) {
+                    config.setConfig(showNumberInMenu: config.showNumberInMenu)
+                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal)
+                Toggle(
+                    "Show HUDs",
+                    isOn: $config.showHUDs
+                ).onChange(of: config.showHUDs) {
+                    config.setConfig(showHUDs: config.showHUDs)
+                    if config.showHUDs {
+                        hudManager.openHUDs()
+                    } else {
+                        hudManager.closeHUDs()
+                    }
+                }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal)
             }.padding(.vertical, 2)
             
             Form {

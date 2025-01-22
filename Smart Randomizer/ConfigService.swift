@@ -21,6 +21,8 @@ class ConfigService:ObservableObject {
     @Published var maxValue: Int
     @Published var generateEvery: Double
     @Published var runOnStartUp: Bool = false;
+    @Published var showHUDs: Bool = false;
+    @Published var showNumberInMenu: Bool = false;
     @Published var huds: [UUID:HUDConfig] = [:]
     
     let defaults = UserDefaults.standard
@@ -30,7 +32,9 @@ class ConfigService:ObservableObject {
         self.minValue = defaults.integer(forKey: "minValue")
         self.generateEvery = defaults.double(forKey: "generateEvery")
         self.runOnStartUp = LaunchAtLogin.isEnabled
-        
+        self.showHUDs = defaults.bool(forKey: "showHUDs")
+        self.showNumberInMenu = defaults.bool(forKey: "showNumberInMenu")
+
         if (self.generateEvery == 0) {
             self.generateEvery = 15
         }
@@ -56,12 +60,25 @@ class ConfigService:ObservableObject {
         minValue: Int? = nil,
         generateEvery: Double? = nil,
         runOnStartUp: Bool? = nil,
-        huds: [UUID:HUDConfig]? = nil
+        huds: [UUID:HUDConfig]? = nil,
+        showNumberInMenu: Bool? = nil,
+        showHUDs: Bool? = nil
+        
     ) {
         if (runOnStartUp != nil) {
             LaunchAtLogin.isEnabled = runOnStartUp!
             self.runOnStartUp = runOnStartUp!
         }
+        if (showNumberInMenu != nil) {
+            self.showNumberInMenu = showNumberInMenu!
+            defaults.set(showNumberInMenu!, forKey: "showNumberInMenu")
+        }
+        
+        if (showHUDs != nil) {
+            self.showHUDs = showHUDs!
+            defaults.set(showHUDs!, forKey: "showHUDs")
+        }
+        
         if (maxValue != nil) {
             print("SET MAX VALUE")
             self.maxValue = maxValue!

@@ -30,20 +30,17 @@ class HUDManager: ObservableObject {
     
     
     func addHUD(hud: HUDConfig) -> NSWindow {
-        let window = NSWindow(
-            contentRect: NSRect(x: hud.x, y: hud.y, width: 300, height: 200),
-            styleMask: [.borderless, .fullSizeContentView, .hudWindow],
-            backing: .buffered,
-            defer: false
+        let window = HUDWindow(hud: hud)
+        
+        let view = HUDView(
+            id: hud.id,
+            manager: self,
+            config: appConfig,
+            timer: timer
         )
         
         window.contentView = NSHostingView(
-            rootView: HUDView(
-                id: hud.id,
-                manager: self,
-                config: appConfig,
-                timer: timer
-            )
+            rootView: view
         )
         window.backgroundColor = NSColor.clear
         window.isReleasedWhenClosed = false
@@ -86,30 +83,17 @@ class HUDManager: ObservableObject {
     
     @objc private func windowDidMove(_ notification: Notification) {
         
-        guard let window = notification.object as? NSWindow else { return }
+        guard let window = notification.object as? HUDWindow else { return }
         
-        var hudID: UUID? = nil
-        
-        for (id, temp) in self.windows {
-            if temp == window {
-                hudID = id
-                break
-            }
-        }
-        
-        if (hudID == nil) {
-            print("COULD NOT FIND HUD ID")
-            return
-        }
         
         let frame = window.frame
         let x = Int(frame.origin.x)
         let y = Int(frame.origin.y)
         
-
-        appConfig.huds[hudID!] = HUDConfig(x: x, y: y, id: hudID!)
+        let hudID = window.id
+        appConfig.huds[hudID] = HUDConfig(x: x, y: y, id: hudID)
         appConfig.setConfig(huds: appConfig.huds)
-        print("Window \(hudID!) moved to: x: \(x), y: \(y)")
+        print("Window \(hudID) moved to: x: \(x), y: \(y)")
     }
     
     func closeHUDs() {
@@ -126,11 +110,12 @@ class HUDManager: ObservableObject {
     }
     
     func toggleHUDs() {
-        if (areHUDsVisible) {
+        if (appConfig.showHUDs) {
             closeHUDs()
         } else {
             openHUDs()
         }
-        areHUDsVisible = !areHUDsVisible
+        
+        appConfig.setConfig(showHUDs: !appConfig.showHUDs)
     }
 }

@@ -56,7 +56,9 @@ struct RandomizerApp: App {
             showWelcome = false;
         }
         
-        hudManager.openHUDs()
+        if (appConfig.showHUDs) {
+            hudManager.openHUDs()
+        }
     }
     
     var body: some Scene {
@@ -71,7 +73,7 @@ struct RandomizerApp: App {
                         .frame(maxWidth: .infinity)
                 }.buttonStyle(.borderedProminent).tint(.green)
                 
-                SettingsView(config: appConfig)
+                SettingsView(config: appConfig, hudManager: hudManager)
                 
                 Button {
                     NSApplication.shared.terminate(nil)
@@ -89,8 +91,10 @@ struct RandomizerApp: App {
                 .frame(maxWidth: .infinity)
         } label: {
             Image(systemName: "scribble.variable")
-            Text(self.randomizer.value.formatted(.number)).onReceive(timer) { input in
-                self.randomizer.updateIfReady()
+            if (self.appConfig.showNumberInMenu) {
+                Text(self.randomizer.value.formatted(.number)).onReceive(timer) { input in
+                    self.randomizer.updateIfReady()
+                }
             }
         }.menuBarExtraStyle(.window)
     }

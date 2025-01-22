@@ -34,6 +34,7 @@ struct HUDView: View {
         )
     }
     
+    
     var body: some View {
         Text(self.randomizer.value.formatted(.number))
             .frame(width: 40, height: 22)
@@ -49,9 +50,24 @@ struct HUDView: View {
                 Button(action: {
                     self.hudManager.close(id: self.id)
                 }) {
-                    Text("Remove HUD")
+                    Text("Remove")
                     Image(systemName: "xmark.circle")
                 }
             }
+    }
+}
+
+class HUDWindow: NSWindow {
+    let id: UUID
+    
+    init(hud: HUDConfig) {
+        self.id = hud.id
+        
+        super.init(
+            contentRect: NSRect(x: hud.x, y: hud.y, width: 40, height: 22),
+            styleMask: [.borderless, .fullSizeContentView, .hudWindow],
+            backing: .buffered,
+            defer: false
+        )
     }
 }
