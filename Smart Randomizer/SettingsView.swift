@@ -5,7 +5,6 @@
 //  Created by TODD SIFLEET on 1/5/25.
 //
 import SwiftUI
-import KeyboardShortcuts
 
 
 struct SettingsView: View {
@@ -21,7 +20,6 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
-            
             HStack {
                 Text("Minimum Value")
                 TextField("Min Value", value: $config.minValue, formatter: NumberFormatter()).onChange(of: config.minValue) {
@@ -74,17 +72,6 @@ struct SettingsView: View {
                     }
                 }.frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal)
             }.padding(.vertical, 2)
-            
-            Form {
-                KeyboardShortcuts.Recorder("Generate", name: .generateRandomNumber)
-                KeyboardShortcuts.Recorder("Toggle HUDs", name: .toggleShowHUDs)
-                KeyboardShortcuts.Recorder("Add HUD", name: .newHUD)
-            }.padding(.vertical, 2).padding(.bottom, 10)
-            
-        }.overlay(
-            RoundedRectangle(
-                cornerRadius: 5
-            ).stroke(.gray, lineWidth: 1)
-        )
+        }
     }
 }

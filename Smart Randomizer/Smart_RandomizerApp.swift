@@ -43,8 +43,6 @@ struct RandomizerApp: App {
         
 
         if showWelcome {
-            print("Show Welcome")
-            
             welcomeWindow = NSWindow()
             welcomeWindow?.contentView = NSHostingView(rootView: WelcomeView())
             welcomeWindow?.identifier = NSUserInterfaceItemIdentifier(rawValue: "welcome")
@@ -65,15 +63,19 @@ struct RandomizerApp: App {
         MenuBarExtra(isInserted: .constant(true)) {
             VStack {
                 Text("")
-                Button {
-                    self.randomizer.update()
-                    
-                } label: {
-                    Text("Generate")
-                        .frame(maxWidth: .infinity)
-                }.buttonStyle(.borderedProminent).tint(.green)
+
                 
-                SettingsView(config: appConfig, hudManager: hudManager)
+                TabView {
+                    RandomView(randomizer: randomizer).tabItem {
+                        Text("Home")
+                    }
+                    SettingsView(config: appConfig, hudManager: hudManager).tabItem {
+                        Text("Settings")
+                    }
+                    ShortCutsView().tabItem {
+                        Text("Shortcuts")
+                    }
+                }
                 
                 Button {
                     NSApplication.shared.terminate(nil)
