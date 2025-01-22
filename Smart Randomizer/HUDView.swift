@@ -12,18 +12,26 @@ import Combine
 
 struct HUDView: View {
     @StateObject var randomizer: RandomizerService
-    @StateObject var appConfig: ConfigService
-    let timer: Publishers.Autoconnect<Timer.TimerPublisher>
+    @StateObject var hudManager: HUDManager
     
-    init(config: ConfigService, timer: Publishers.Autoconnect<Timer.TimerPublisher>) {
-        let randomizer = RandomizerService(config: config)
+    let timer: Publishers.Autoconnect<Timer.TimerPublisher>
+    let id: UUID
+    
+    init(
+        id: UUID,
+        manager: HUDManager,
+        config: ConfigService,
+        timer: Publishers.Autoconnect<Timer.TimerPublisher>
+    ) {
+        self.id = id
         self.timer = timer
-        self._appConfig = StateObject(wrappedValue: config)
-        self._randomizer = StateObject(wrappedValue: randomizer)
-    }
-
-    func close(_: _ModifiersGesture<TapGesture>.Value) {
-        print("ADSFSDF")
+        
+        self._randomizer = StateObject(
+            wrappedValue: RandomizerService(config: config)
+        )
+        self._hudManager = StateObject(
+            wrappedValue: manager
+        )
     }
     
     var body: some View {
@@ -39,10 +47,10 @@ struct HUDView: View {
             }
             .contextMenu {
                 Button(action: {
-                    print("Hello")
+                    self.hudManager.close(id: self.id)
                 }) {
-                    Text("Say Hello")
-                    Image(systemName: "hand.wave")
+                    Text("Remove HUD")
+                    Image(systemName: "xmark.circle")
                 }
             }
     }

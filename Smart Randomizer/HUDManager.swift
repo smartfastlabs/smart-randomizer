@@ -29,7 +29,7 @@ class HUDManager: ObservableObject {
     }
     
     
-    func addHUD(hud: HUDConfig, timer: Publishers.Autoconnect<Timer.TimerPublisher>) -> NSWindow {
+    func addHUD(hud: HUDConfig) -> NSWindow {
         let window = NSWindow(
             contentRect: NSRect(x: hud.x, y: hud.y, width: 300, height: 200),
             styleMask: [.borderless, .fullSizeContentView, .hudWindow],
@@ -37,7 +37,14 @@ class HUDManager: ObservableObject {
             defer: false
         )
         
-        window.contentView = NSHostingView(rootView: HUDView(config: appConfig, timer: timer))
+        window.contentView = NSHostingView(
+            rootView: HUDView(
+                id: hud.id,
+                manager: self,
+                config: appConfig,
+                timer: timer
+            )
+        )
         window.backgroundColor = NSColor.clear
         window.isReleasedWhenClosed = false
         window.isMovableByWindowBackground = true
@@ -54,12 +61,27 @@ class HUDManager: ObservableObject {
     }
     func newHUD() {
         var hud = HUDConfig(x: 500, y: 500, id: UUID())
-        let window = addHUD(hud: hud, timer: timer)
+        let window = addHUD(hud: hud)
         window.center()
         hud.x = Int(window.frame.origin.x)
         hud.y = Int(window.frame.origin.y)
         self.appConfig.huds[hud.id] = hud
         self.appConfig.setConfig(huds: self.appConfig.huds)
+    }
+    
+    func close(id: UUID) {
+        let window = self.windows[id]
+        
+        if window == nil {
+            print("WINDOW NOT FOUND \(id)")
+            return
+        }
+        window!.close()
+        self.windows[id] = nil
+        
+        self.appConfig.huds[id] = nil
+        self.appConfig.setConfig(huds: self.appConfig.huds)
+        
     }
     
     @objc private func windowDidMove(_ notification: Notification) {
@@ -99,7 +121,7 @@ class HUDManager: ObservableObject {
     
     func openHUDs() {
         for (_, hud) in self.appConfig.huds {
-            _ = addHUD(hud: hud, timer: timer)
+            _ = addHUD(hud: hud)
         }
     }
     
